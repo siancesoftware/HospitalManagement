@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: hm-config
+  namespace: hm-erp
+data:
+  db.host: "hm-postgres.hm-erp.svc.cluster.local"
+  kafka.servers: "hm-kafka-0.hm-kafka.hm-erp.svc.cluster.local:9092"
+  redis.host: "hm-redis.hm-erp.svc.cluster.local"
+  keycloak.url: "http://hm-keycloak.hm-erp.svc.cluster.local:8180"
+  eureka.host: "hm-discovery-server.hm-erp.svc.cluster.local"

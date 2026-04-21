@@ -1,0 +1,133 @@
+# Template - copy and customize per service
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ${SERVICE_NAME}
+  namespace: hm-erp
+  labels:
+    app: ${SERVICE_NAME}
+    tier: backend
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: ${SERVICE_NAME}
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+  template:
+    metadata:
+      labels:
+        app: ${SERVICE_NAME}
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/path: "/actuator/prometheus"
+        prometheus.io/port: "${SERVICE_PORT}"
+    spec:
+      containers:
+        - name: ${SERVICE_NAME}
+          image: siance/${SERVICE_NAME}:latest
+          ports:
+            - containerPort: ${SERVICE_PORT}
+          env:
+            - name: SPRING_PROFILES_ACTIVE
+              value: "prod"
+            - name: DB_HOST
+              valueFrom:
+                configMapKeyRef:
+                  name: hm-config
+                  key: db.host
+            - name: DB_PORT
+              value: "5432"
+            - name: DB_USER
+              valueFrom:
+                secretKeyRef:
+                  name: hm-db-secret
+                  key: username
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: hm-db-secret
+                  key: password
+            - name: KAFKA_SERVERS
+              valueFrom:
+                configMapKeyRef:
+                  name: hm-config
+                  key: kafka.servers
+            - name: REDIS_HOST
+              valueFrom:
+                configMapKeyRef:
+                  name: hm-config
+                  key: redis.host
+            - name: KEYCLOAK_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: hm-config
+                  key: keycloak.url
+            - name: EUREKA_HOST
+              valueFrom:
+                configMapKeyRef:
+                  name: hm-config
+                  key: eureka.host
+          resources:
+            requests:
+              cpu: 500m
+              memory: 1Gi
+            limits:
+              cpu: 1000m
+              memory: 2Gi
+          livenessProbe:
+            httpGet:
+              path: /actuator/health/liveness
+              port: ${SERVICE_PORT}
+            initialDelaySeconds: 60
+            periodSeconds: 30
+            failureThreshold: 3
+          readinessProbe:
+            httpGet:
+              path: /actuator/health/readiness
+              port: ${SERVICE_PORT}
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            failureThreshold: 3
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ${SERVICE_NAME}
+  namespace: hm-erp
+spec:
+  selector:
+    app: ${SERVICE_NAME}
+  ports:
+    - port: ${SERVICE_PORT}
+      targetPort: ${SERVICE_PORT}
+  type: ClusterIP
+---
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: ${SERVICE_NAME}-hpa
+  namespace: hm-erp
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: ${SERVICE_NAME}
+  minReplicas: 2
+  maxReplicas: 5
+  metrics:
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: Utilization
+          averageUtilization: 70
+    - type: Resource
+      resource:
+        name: memory
+        target:
+          type: Utilization
+          averageUtilization: 80

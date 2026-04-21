@@ -1,0 +1,13 @@
+server:
+  port: 8100
+spring:
+  datasource:
+    url: jdbc:postgresql://${DB_HOST:localhost}:${DB_PORT:5432}/patient_db
+    username: ${DB_USER:postgres}
+    password: ${DB_PASSWORD:postgres}
+  kafka:
+    consumer:
+      group-id: patient-service-group
+  flyway:
+    enabled: true
+    locations: classpath:db/migration

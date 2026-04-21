@@ -1,0 +1,79 @@
+{
+  "realm": "hospital",
+  "enabled": true,
+  "registrationAllowed": false,
+  "roles": {
+    "realm": [
+      {"name": "ADMIN", "description": "System Administrator"},
+      {"name": "DOCTOR", "description": "Doctor / Consultant"},
+      {"name": "NURSE", "description": "Nursing Staff"},
+      {"name": "RECEPTIONIST", "description": "Front Desk Staff"},
+      {"name": "REGISTRATION_CLERK", "description": "Patient Registration"},
+      {"name": "BILLING", "description": "Billing Staff"},
+      {"name": "LAB_TECH", "description": "Lab Technician"},
+      {"name": "PHARMACIST", "description": "Pharmacy Staff"},
+      {"name": "HR_MANAGER", "description": "HR Manager"},
+      {"name": "STORE_MANAGER", "description": "Inventory Manager"},
+      {"name": "QUALITY_MANAGER", "description": "Quality Manager"},
+      {"name": "PATIENT", "description": "Patient Portal User"}
+    ]
+  },
+  "clients": [
+    {
+      "clientId": "hm-gateway",
+      "enabled": true,
+      "publicClient": false,
+      "secret": "gateway-secret",
+      "directAccessGrantsEnabled": true,
+      "serviceAccountsEnabled": true,
+      "redirectUris": ["http://localhost:8080/*"],
+      "webOrigins": ["*"]
+    },
+    {
+      "clientId": "hm-frontend",
+      "enabled": true,
+      "publicClient": true,
+      "directAccessGrantsEnabled": true,
+      "redirectUris": ["http://localhost:3001/*"],
+      "webOrigins": ["*"]
+    }
+  ],
+  "users": [
+    {
+      "username": "admin",
+      "enabled": true,
+      "email": "admin@hospital.local",
+      "firstName": "System",
+      "lastName": "Admin",
+      "credentials": [{"type": "password", "value": "admin123", "temporary": false}],
+      "realmRoles": ["ADMIN"]
+    },
+    {
+      "username": "doctor1",
+      "enabled": true,
+      "email": "doctor1@hospital.local",
+      "firstName": "Dr. Amit",
+      "lastName": "Sharma",
+      "credentials": [{"type": "password", "value": "doctor123", "temporary": false}],
+      "realmRoles": ["DOCTOR"]
+    },
+    {
+      "username": "nurse1",
+      "enabled": true,
+      "email": "nurse1@hospital.local",
+      "firstName": "Priya",
+      "lastName": "Patel",
+      "credentials": [{"type": "password", "value": "nurse123", "temporary": false}],
+      "realmRoles": ["NURSE"]
+    },
+    {
+      "username": "reception1",
+      "enabled": true,
+      "email": "reception1@hospital.local",
+      "firstName": "Ravi",
+      "lastName": "Kumar",
+      "credentials": [{"type": "password", "value": "reception123", "temporary": false}],
+      "realmRoles": ["RECEPTIONIST", "REGISTRATION_CLERK"]
+    }
+  ]
+}
