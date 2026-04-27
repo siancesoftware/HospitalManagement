@@ -22,16 +22,16 @@ test-integration: ## Run integration tests
 
 # Infrastructure
 run-infra: ## Start all infrastructure (Postgres, Kafka, Redis, etc.)
-	docker-compose up -d
+	docker compose up -d
 
 stop-infra: ## Stop all infrastructure
-	docker-compose down
+	docker compose down
 
 reset-infra: ## Reset infrastructure (destroy volumes)
-	docker-compose down -v
+	docker compose down -v
 
 logs-infra: ## Show infrastructure logs
-	docker-compose logs -f
+	docker compose logs -f
 
 # Individual services
 run-config: ## Start config server

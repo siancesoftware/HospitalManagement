@@ -33,6 +33,7 @@ spring:
               args:
                 redis-rate-limiter.replenishRate: 100
                 redis-rate-limiter.burstCapacity: 200
+                key-resolver: "#{@ipKeyResolver}"
 
         # Appointment Service
         - id: appointment-service
