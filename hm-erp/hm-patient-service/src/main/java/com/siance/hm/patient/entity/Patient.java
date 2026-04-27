@@ -3,6 +3,7 @@ package com.siance.hm.patient.entity;
 import com.siance.hm.common.entity.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 import java.time.LocalDate;
@@ -15,7 +16,7 @@ import java.util.*;
     @Index(name = "idx_patient_phone", columnList = "primary_phone"),
     @Index(name = "idx_patient_name", columnList = "first_name, last_name")
 })
-@Getter @Setter @Builder @NoArgsConstructor @AllArgsConstructor
+@Getter @Setter @SuperBuilder @NoArgsConstructor @AllArgsConstructor
 public class Patient extends BaseEntity {
 
     @Column(name = "uhid", unique = true, nullable = false, length = 20)

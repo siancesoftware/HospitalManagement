@@ -3,10 +3,11 @@ package com.siance.hm.patient.entity;
 import com.siance.hm.common.entity.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 @Entity
 @Table(name = "patient_allergies")
-@Getter @Setter @Builder @NoArgsConstructor @AllArgsConstructor
+@Getter @Setter @SuperBuilder @NoArgsConstructor @AllArgsConstructor
 public class PatientAllergy extends BaseEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)

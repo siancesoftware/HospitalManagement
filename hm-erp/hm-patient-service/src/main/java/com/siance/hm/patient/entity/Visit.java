@@ -3,6 +3,7 @@ package com.siance.hm.patient.entity;
 import com.siance.hm.common.entity.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 import java.time.Instant;
 
 @Entity
@@ -11,7 +12,7 @@ import java.time.Instant;
     @Index(name = "idx_visit_doctor", columnList = "doctor_id"),
     @Index(name = "idx_visit_status", columnList = "visit_type, status")
 })
-@Getter @Setter @Builder @NoArgsConstructor @AllArgsConstructor
+@Getter @Setter @SuperBuilder @NoArgsConstructor @AllArgsConstructor
 public class Visit extends BaseEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
