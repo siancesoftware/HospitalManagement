@@ -1,0 +1,58 @@
+server:
+  port: 8081
+  servlet:
+    context-path: /api/v1
+  compression:
+    enabled: true
+
+spring:
+  application:
+    name: hm-auth-service
+  datasource:
+    url: jdbc:postgresql://${DB_HOST:localhost}:${DB_PORT:5432}/${DB_NAME:auth_db}
+    username: ${DB_USER:hm}
+    password: ${DB_PASSWORD:hm}
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    open-in-view: false
+    properties:
+      hibernate:
+        jdbc:
+          time_zone: UTC
+  flyway:
+    enabled: true
+    locations: classpath:db/migration
+  jackson:
+    default-property-inclusion: non_null
+
+# Same env var names as the original .env - existing secrets/CI variables carry over unchanged.
+hm:
+  jwt:
+    secret: ${JWT_SECRET:dev-only-access-secret-change-me-please-32b!!}
+    expiration-seconds: ${JWT_EXPIRATION_TIME:3600}
+    refresh-secret: ${JWT_REFRESH_SECRET:dev-only-refresh-secret-change-me-please-32b!!}
+    refresh-expiration-seconds: ${JWT_REFRESH_EXPIRATION_TIME:604800}
+  internal:
+    api-key: ${INTERNAL_API_KEY:dev-only-internal-key-change-me}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+  endpoint:
+    health:
+      probes:
+        enabled: true
+      show-details: when-authorized
+
+springdoc:
+  swagger-ui:
+    path: /docs
+  api-docs:
+    path: /v3/api-docs
+
+logging:
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} [%X{requestId}] %-5level %logger{36} - %msg%n"

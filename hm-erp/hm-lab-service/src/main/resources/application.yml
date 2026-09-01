@@ -1,0 +1,55 @@
+server:
+  port: 8202
+  servlet:
+    context-path: /api/v1
+  compression:
+    enabled: true
+
+spring:
+  application:
+    name: hm-lab-service
+  datasource:
+    url: jdbc:postgresql://${DB_HOST:localhost}:${DB_PORT:5432}/${DB_NAME:lab_db}
+    username: ${DB_USER:hm}
+    password: ${DB_PASSWORD:hm}
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    open-in-view: false
+    properties:
+      hibernate:
+        jdbc:
+          time_zone: UTC
+  flyway:
+    enabled: true
+    locations: classpath:db/migration
+  jackson:
+    default-property-inclusion: non_null
+
+hm:
+  jwt:
+    secret: ${JWT_SECRET:dev-only-access-secret-change-me-please-32b!!}
+    expiration-seconds: ${JWT_EXPIRATION_TIME:3600}
+    refresh-secret: ${JWT_REFRESH_SECRET:dev-only-refresh-secret-change-me-please-32b!!}
+    refresh-expiration-seconds: ${JWT_REFRESH_EXPIRATION_TIME:604800}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+  endpoint:
+    health:
+      probes:
+        enabled: true
+      show-details: when-authorized
+
+springdoc:
+  swagger-ui:
+    path: /docs
+  api-docs:
+    path: /v3/api-docs
+
+logging:
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} [%X{requestId}] %-5level %logger{36} - %msg%n"

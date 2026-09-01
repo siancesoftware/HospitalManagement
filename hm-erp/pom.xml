@@ -97,6 +97,12 @@
                 <version>${springdoc.version}</version>
             </dependency>
 
+            <dependency>
+                <groupId>org.springdoc</groupId>
+                <artifactId>springdoc-openapi-starter-webflux-ui</artifactId>
+                <version>${springdoc.version}</version>
+            </dependency>
+
             <!-- Resilience4j -->
             <dependency>
                 <groupId>io.github.resilience4j</groupId>

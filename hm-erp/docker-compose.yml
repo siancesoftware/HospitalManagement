@@ -172,6 +172,120 @@ services:
     networks:
       - hm-network
 
+  # ──────────────── HM Discovery Server ────────────────
+  hm-discovery-server:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        SERVICE_NAME: hm-discovery-server
+    container_name: hm-discovery-server
+    ports:
+      - "8761:8761"
+    networks:
+      - hm-network
+
+   # ──────────────── HM API Gateway ────────────────
+  hm-gateway:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        SERVICE_NAME: hm-gateway
+    container_name: hm-gateway
+    ports:
+      - "8080:8080"
+    depends_on:
+      - hm-discovery-server
+      - redis
+      - keycloak
+    networks:
+      - hm-network
+
+  # ──────────────── HM Patient Service ────────────────
+  hm-patient-service:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        SERVICE_NAME: hm-patient-service
+    container_name: hm-patient-service
+    depends_on:
+      - hm-discovery-server
+      - postgres
+    networks:
+      - hm-network
+
+  # ──────────────── HM Master Data Service ────────────────
+  hm-master-data-service:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        SERVICE_NAME: hm-master-data-service
+    container_name: hm-master-data-service
+    depends_on:
+      - hm-discovery-server
+      - postgres
+    networks:
+      - hm-network
+
+  # ──────────────── HM Appointment Service ────────────────
+  hm-appointment-service:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        SERVICE_NAME: hm-appointment-service
+    container_name: hm-appointment-service
+    depends_on:
+      - hm-discovery-server
+      - postgres
+    networks:
+      - hm-network
+
+  # ──────────────── HM OPD Service ────────────────
+  hm-opd-service:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        SERVICE_NAME: hm-opd-service
+    container_name: hm-opd-service
+    depends_on:
+      - hm-discovery-server
+      - postgres
+    networks:
+      - hm-network
+
+  # ──────────────── HM Billing Service ────────────────
+  hm-billing-service:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        SERVICE_NAME: hm-billing-service
+    container_name: hm-billing-service
+    depends_on:
+      - hm-discovery-server
+      - postgres
+    networks:
+      - hm-network
+
+  # ──────────────── HM Notification Service ────────────────
+  hm-notification-service:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        SERVICE_NAME: hm-notification-service
+    container_name: hm-notification-service
+    depends_on:
+      - hm-discovery-server
+      - kafka
+    networks:
+      - hm-network
+
 volumes:
   postgres_data:
   redis_data:
